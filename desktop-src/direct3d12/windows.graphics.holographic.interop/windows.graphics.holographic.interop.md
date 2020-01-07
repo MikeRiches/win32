@@ -19,7 +19,7 @@ ms.custom: 19H1
 > The feature described in this topic is implemented in 
 Windows 10, version 1903 (10.0; Build 18362), but the `Windows.Graphics.Holographic.Interop.h` header file is available only in the [Windows 10 SDK Insider Preview](https://www.microsoft.com/software-download/windowsinsiderpreviewSDK).
 
-This header is used to interoperate with types in the [Windows.Graphics.Holographic](/uwp/api/windows.graphics.holographic) namespace.
+The APIs in this header provide functionality for Direct3D 12 apps to interoperate with types in the [Windows.Graphics.Holographic](/uwp/api/windows.graphics.holographic) namespace, allowing for holographic rendering with Direct3D 12.
 
 | Interface | Method |
 |-|-|
