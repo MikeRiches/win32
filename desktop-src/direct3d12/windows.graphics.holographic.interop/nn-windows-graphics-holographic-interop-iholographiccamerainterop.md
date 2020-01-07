@@ -15,13 +15,13 @@ ms.date: 12/13/2019
 > The feature described in this topic is implemented in 
 Windows 10, version 1903 (10.0; Build 18362), but the `Windows.Graphics.Holographic.Interop.h` header file is available only in the [Windows 10 SDK Insider Preview](https://www.microsoft.com/software-download/windowsinsiderpreviewSDK).
 
-Extends [HolographicCamera](/uwp/api/windows.graphics.holographic.holographiccamera) to allow 2D texture resources to be created and used as content buffers for apps using Direct3D 12 for holographic rendering.
+Extends [HolographicCamera](/uwp/api/windows.graphics.holographic.holographiccamera) to allow Direct3D 12 back buffers to be created and used for holographic rendering.
 
 Your application can use this interface to do holographic rendering using Direct3D 12 with minimal overhead. Nano-COM allows Direct3D 12 objects to be used as parameters for API calls directly, rather than by using a container object to pass pointers to devices and resources.
 
-The **IHolographicCameraInterop** interface allows your application to create Direct3D 12 surfaces that interoperate with Windows Mixed Reality APIs. It also allows your application to acquire surfaces for rendering, and subsequently to commit those surfaces before presenting a [HolographicFrame](/uwp/api/windows.graphics.holographic.holographicframe).
+The **IHolographicCameraInterop** interface allows your application to create Direct3D 12 surfaces that interoperate with Windows Mixed Reality APIs. It also allows your application to acquire surfaces for rendering, and subsequently to commit those surfaces as back buffers before presenting a [HolographicFrame](/uwp/api/windows.graphics.holographic.holographicframe).
 
-Your application manages its own pool of holographic buffer resources; it can create additional surfaces as needed in order to continue rendering smoothly. On most devices, this will be 3 or 4 surfaces. Your application should start with at least 2 surfaces in the pool. Your application can dynamically detect when it needs to create a new surface by looking for failed attempts to immediately acquire surfaces that were previously committed for presentation.
+Your application manages its own pool of Direct3D 12 buffer resources for use as render targets; it can create additional surfaces as needed in order to continue rendering smoothly. On most devices, this will be 3 or 4 surfaces. Your application should start with at least 2 surfaces in the pool. Your application can dynamically detect when it needs to create a new surface by looking for failed attempts to immediately acquire surfaces that were previously committed for presentation.
 
 A buffer created by a [HolographicCamera](/uwp/api/windows.graphics.holographic.holographiccamera) object can be used only with that object. It should be released when the [HolographicCamera](/uwp/api/windows.graphics.holographic.holographiccamera) is released, or when the Direct3D 12 device needs to be recreated&mdash;whichever happens first.
 
@@ -51,7 +51,7 @@ winrt::check_hresult(spCameraInterop->CreateDirect3D12BackBufferResource(
 
 Note that you can use the [HolographicViewConfiguration](/uwp/api/windows.graphics.holographic.holographicviewconfiguration) API to determine the available options for buffer format, and to acquire information about render target size for the [HolographicDisplay](/uwp/api/windows.graphics.holographic.holographicdisplay). If your application needs to change the buffer size for Direct3D 12 buffers from the default render target size for the [HolographicCamera](/uwp/api/windows.graphics.holographic.holographiccamera), it should still request a new render target size using the [HolographicViewConfiguration::RequestRenderTargetSize method](/uwp/api/windows.graphics.holographic.holographicviewconfiguration.requestrendertargetsize), and create buffers using the size chosen by that method.
 
-Your Direct3D 12 application can use a viewport size chosen independently by the application. In that case, you must call the [HolographicCameraPose.OverrideViewport](/uwp/api/windows.graphics.holographic.holographiccamerapose.overrideviewport) method each frame to inform the platform about the viewport used for rendering.
+Your Direct3D 12 application can use a viewport size chosen independently by the application. In that case, you must call the [HolographicCameraPose.OverrideViewport](/uwp/api/windows.graphics.holographic.holographiccamerapose.overrideviewport) method each frame to inform the platform about the viewport used for rendering. Apps that also modify the projection matrix to match the resized viewport must also override the projection matrix.
 
 To use this interface in C++/CX, cast the [HolographicCamera](/uwp/api/windows.graphics.holographic.holographiccamera) object to [IInspectable](/windows/win32/api/inspectable/nn-inspectable-iinspectable)\*. Then QueryInterface for the **IHolographicCameraInterop** interface from the **IInspectable** pointer.
 
