@@ -8,7 +8,7 @@ ms.date: 04/19/2019
 ms.custom: 19H1
 ---
 
-# Windows.Graphics.Holographic.Interop.h header
+# Direct3D 12 on Windows Mixed Reality
 
 ## Description
 
